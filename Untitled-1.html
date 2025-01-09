@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>网址拼接工具</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        input[type="text"] {
+            width: 500px;
+            padding: 8px;
+            margin: 5px 0;
+        }
+        button {
+            padding: 10px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>网址拼接工具</h1>
+    <label for="url">请输入链接:</label>
+    <input type="text" id="url" placeholder="例如 https://www.lovense.com">
+    <br><br>
+    <label for="utm_pro">请输入_utm_pro参数:</label>
+    <input type="text" id="utm_pro" placeholder="例如 12345678">
+    <br><br>
+    <button onclick="generateLinks()">生成链接</button>
+    <br><br>
+    <table id="resultsTable"></table>
+
+    <script>
+        function generateLinks() {
+            var url = document.getElementById("url").value;
+            var utmPro = document.getElementById("utm_pro").value;
+            var table = document.getElementById("resultsTable");
+    
+            // 清空表格
+            table.innerHTML = '';
+    
+            // 创建表头
+            var thead = table.createTHead();
+            var headerRow = thead.insertRow();
+            var headers = ['广告位置', '携带官网登录态', '中台问卷'];
+            headers.forEach(function(headerText) {
+                var headerCell = document.createElement('th');
+                headerCell.textContent = headerText;
+                headerRow.appendChild(headerCell);
+            });
+    
+            // 检查URL是否已经包含查询参数
+            var separator = (url.indexOf('?') === -1) ? '?' : '&';
+    
+            // 如果_utm_pro不为空，则添加到基础查询字符串
+            var baseQueryString = '';
+            if (utmPro) {
+                baseQueryString = '_utm_pro=' + encodeURIComponent(utmPro);
+            }
+    
+            // 填充表格数据
+            var adPositions = ['Home页Banner', '官方账号', 'Discover广告位'];
+            adPositions.forEach(function(adPosition) {
+                var row = table.insertRow();
+                var cellAdPosition = row.insertCell(0);
+                var cellOfficialUrl = row.insertCell(1);
+                var cellQnUrl = row.insertCell(2);
+    
+                cellAdPosition.textContent = adPosition;
+    
+                // 官方账号链接
+                var officialUrl = url + (baseQueryString ? separator + baseQueryString : '');
+                if (adPosition === 'Home页Banner') {
+                    officialUrl += '&web_cam=1';
+                }
+                cellOfficialUrl.textContent = officialUrl;
+    
+                // 中台问卷链接
+                var qnUrl = adPosition === 'Home页Banner' ? officialUrl.replace('&web_cam=1', '&web_qn=1') : officialUrl;
+                cellQnUrl.textContent = qnUrl;
+            });
+        }
+    </script>
+    
+</body>
+</html>
