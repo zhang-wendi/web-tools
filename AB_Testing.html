@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AB测试配置后台</title>
+    <style>
+        :root {
+            --primary-color: #3f51b5;
+            --primary-light: #e8eaf6;
+            --primary-dark: #303f9f;
+            --secondary-color: #ff4081;
+            --text-color: #333;
+            --text-light: #666;
+            --bg-color: #f9fafb;
+            --bg-light: #fff;
+            --border-color: #e0e0e0;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --danger-color: #f44336;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: var(--bg-light);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 30px;
+            text-align: center;
+        }
+        
+        h1, h2, h3 {
+            margin-bottom: 16px;
+            color: var(--text-color);
+            letter-spacing: 0.5px;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 0;
+            font-weight: 600;
+        }
+        
+        h2 {
+            font-size: 22px;
+            margin-top: 10px;
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 8px;
+            font-weight: 500;
+            color: var(--primary-dark);
+        }
+        
+        h3 {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--primary-color);
+            margin-top: 15px;
+        }
+        
+        .content {
+            padding: 25px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding: 25px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background-color: var(--bg-light);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+            transition: var(--transition);
+        }
+        
+        .section:hover {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
+        }
+        
+        .form-group {
+            margin-bottom: 22px;
+        }
+        
+        .sub-form-group {
+            margin-bottom: 18px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+        
+        .sub-form-group:last-child {
+            border-bottom: none;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        p {
+            color: var(--text-light);
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.1);
+        }
+        
+        input[type="checkbox"], input[type="radio"] {
+            width: auto;
+            margin-right: 5px;
+        }
+        
+        select[multiple] {
+            height: 120px;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .checkbox-group, .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 8px;
+        }
+        
+        .checkbox-item, .radio-item {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+        
+        .flex-row {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .flex-col {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary-color);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e91e63;
+        }
+        
+        .btn-success {
+            background-color: var(--success-color);
+        }
+        
+        .btn-success:hover {
+            background-color: #388e3c;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning-color);
+        }
+        
+        .btn-warning:hover {
+            background-color: #f57c00;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger-color);
+        }
+        
+        .btn-danger:hover {
+            background-color: #d32f2f;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-1px);
+        }
+        
+        .btn-sm {
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 30px;
+            gap: 10px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 500;
+        }
+        
+        td {
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        tr:last-child td {
+            border-bottom: none;
+        }
+        
+        tr:nth-child(even) {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+        
+        tr:hover {
+            background-color: rgba(0, 0, 0, 0.04);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 500;
+            color: white;
+        }
+        
+        .badge-success {
+            background-color: var(--success-color);
+        }
+        
+        .badge-warning {
+            background-color: var(--warning-color);
+        }
+        
+        .badge-info {
+            background-color: var(--primary-color);
+        }
+        
+        .experiment-group {
+            background-color: rgba(0, 0, 0, 0.02);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px dashed var(--border-color);
+        }
+        
+        .experiment-group h4 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-weight: 500;
+            color: var(--primary-dark);
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .input-group input {
+            flex: 1;
+        }
+        
+        .switch-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .switch-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 500;
+            margin-bottom: 0;
+        }
+        
+        .switch-label input[type="checkbox"] {
+            margin-right: 8px;
+        }
+        
+        .switch-text {
+            color: var(--text-color);
+        }
+        
+        .condition-container {
+            padding-left: 25px;
+            margin-top: 10px;
+            border-left: 2px solid var(--primary-light);
+        }
+        
+        .multi-select-container {
+            margin-top: 10px;
+        }
+        
+        .multi-select-container select {
+            height: 150px;
+            background-color: white;
+        }
+        
+        .multi-select-container select option {
+            padding: 8px 12px;
+        }
+        
+        .multi-select-container select option:checked {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+        }
+        
+        .multi-select-container .select-hint {
+            display: block;
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 5px;
+        }
+        
+        .info-box {
+            background-color: var(--primary-light);
+            border-left: 4px solid var(--primary-color);
+            padding: 12px 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+        
+        .info-box .info-content {
+            font-size: 14px;
+            color: var(--text-color);
+        }
+        
+        .info-box p {
+            margin-bottom: 8px;
+        }
+        
+        .info-box p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .info-box strong {
+            color: var(--primary-dark);
+        }
+        
+        .date-time-picker {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .date-time-picker input[type="datetime-local"] {
+            cursor: pointer;
+        }
+        
+        .date-time-picker label {
+            cursor: pointer;
+        }
+        
+        .date-time-input-wrapper {
+            position: relative;
+        }
+        
+        .date-time-input-wrapper::after {
+            content: '\1F4C5'; /* 日历图标 Unicode */
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            font-size: 16px;
+            color: var(--text-light);
+        }
+        
+        .page {
+            display: block;
+            animation: fadeEffect 0.3s;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AB测试配置后台</h1>
+        </header>
+        
+        <!-- 实验列表页面 -->
+        <div id="listPage" class="page">
+            <div class="content">
+                <div class="page-header">
+                    <h2>实验列表</h2>
+                    <button class="btn btn-primary" onclick="showCreatePage()">创建新实验</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>实验名称</th>
+                            <th>实验Key</th>
+                            <th>状态</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="experimentsList">
+                        <!-- 实验列表将通过JavaScript动态加载 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- 创建实验页面 -->
+        <div id="createPage" class="page" style="display: none;">
+            <div class="content">
+                <div class="page-header">
+                    <h2>创建新实验</h2>
+                    <button class="btn btn-outline" onclick="showListPage()">返回列表</button>
+                </div>
+                
+                <form id="experimentForm">
+                    <div class="section">
+                        <h2>基本信息</h2>
+                        <div class="form-group">
+                            <label for="experimentName">实验名称</label>
+                            <input type="text" id="experimentName" required placeholder="输入实验名称">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="experimentKey">实验Key</label>
+                            <input type="text" id="experimentKey" required placeholder="输入实验Key，客户端通过此Key获取实验配置">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="experimentDesc">实验描述</label>
+                            <textarea id="experimentDesc" placeholder="输入实验描述、目标等信息"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>实验对象</h2>
+                        
+                        <div class="form-group">
+                            <h3>1. 用户标识</h3>
+                            <label>选择识别用户的唯一标识</label>
+                            <div class="radio-group">
+                                <label class="radio-item">
+                                    <input type="radio" name="userIdentifier" value="deviceId" checked> 
+                                    <span>设备ID</span>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="userIdentifier" value="accountId"> 
+                                    <span>账号ID</span>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="userIdentifier" value="email"> 
+                                    <span>邮箱</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <h3>2. 用户基础信息</h3>
+                            <p>选择实验目标用户需满足的基础条件（可选）</p>
+                            
+                            <div class="sub-form-group">
+                                <div class="switch-header">
+                                    <label class="switch-label">
+                                        <input type="checkbox" class="condition-switch" data-target="osType-container">
+                                        <span class="switch-text">启用手机系统筛选</span>
+                                    </label>
+                                </div>
+                                <div id="osType-container" class="condition-container" style="display: none;">
+                                    <div class="checkbox-group">
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" name="osType" value="android"> 
+                                            <span>Android</span>
+                                        </label>
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" name="osType" value="ios"> 
+                                            <span>iOS</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="sub-form-group">
+                                <div class="switch-header">
+                                    <label class="switch-label">
+                                        <input type="checkbox" class="condition-switch" data-target="appVersion-container">
+                                        <span class="switch-text">启用App版本筛选</span>
+                                    </label>
+                                </div>
+                                <div id="appVersion-container" class="condition-container" style="display: none;">
+                                    <div class="input-group">
+                                        <input type="text" placeholder="最小版本号" id="minAppVersion">
+                                        <input type="text" placeholder="最大版本号" id="maxAppVersion">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="sub-form-group">
+                                <div class="switch-header">
+                                    <label class="switch-label">
+                                        <input type="checkbox" class="condition-switch" data-target="systemLanguage-container">
+                                        <span class="switch-text">启用系统语言筛选</span>
+                                    </label>
+                                </div>
+                                <div id="systemLanguage-container" class="condition-container" style="display: none;">
+                                    <div class="multi-select-container">
+                                        <select multiple id="systemLanguage" size="8">
+                                            <option value="zh">中文</option>
+                                            <option value="en">英文</option>
+                                            <option value="ja">日语</option>
+                                            <option value="ko">韩语</option>
+                                            <option value="fr">法语</option>
+                                            <option value="de">德语</option>
+                                            <option value="es">西班牙语</option>
+                                            <option value="other">其他</option>
+                                        </select>
+                                        <span class="select-hint">按住Ctrl键(Mac上为Command键)可选择多项</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="sub-form-group">
+                                <div class="switch-header">
+                                    <label class="switch-label">
+                                        <input type="checkbox" class="condition-switch" data-target="ipCountry-container">
+                                        <span class="switch-text">启用IP国家/地区筛选</span>
+                                    </label>
+                                </div>
+                                <div id="ipCountry-container" class="condition-container" style="display: none;">
+                                    <div class="multi-select-container">
+                                        <select multiple id="ipCountry" size="8">
+                                            <option value="cn">中国</option>
+                                            <option value="us">美国</option>
+                                            <option value="jp">日本</option>
+                                            <option value="kr">韩国</option>
+                                            <option value="uk">英国</option>
+                                            <option value="de">德国</option>
+                                            <option value="fr">法国</option>
+                                            <option value="other">其他</option>
+                                        </select>
+                                        <span class="select-hint">按住Ctrl键(Mac上为Command键)可选择多项</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <h3>3. 用户属性</h3>
+                            <p>选择实验目标用户需满足的属性条件（可选）</p>
+                            
+                            <div class="sub-form-group">
+                                <div class="switch-header">
+                                    <label class="switch-label">
+                                        <input type="checkbox" class="condition-switch" data-target="userType-container">
+                                        <span class="switch-text">启用用户类型筛选</span>
+                                    </label>
+                                </div>
+                                <div id="userType-container" class="condition-container" style="display: none;">
+                                    <div class="checkbox-group">
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" name="userType" value="new"> 
+                                            <span>新用户</span>
+                                        </label>
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" name="userType" value="old"> 
+                                            <span>老用户</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="sub-form-group">
+                                <div class="switch-header">
+                                    <label class="switch-label">
+                                        <input type="checkbox" class="condition-switch" data-target="deviceConnection-container">
+                                        <span class="switch-text">启用设备连接情况筛选</span>
+                                    </label>
+                                </div>
+                                <div id="deviceConnection-container" class="condition-container" style="display: none;">
+                                    <div class="checkbox-group">
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" name="deviceConnection" value="connected"> 
+                                            <span>曾连接过玩具</span>
+                                        </label>
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" name="deviceConnection" value="never"> 
+                                            <span>从未连接过玩具</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="sub-form-group">
+                                <div class="switch-header">
+                                    <label class="switch-label">
+                                        <input type="checkbox" class="condition-switch" data-target="regDays-container">
+                                        <span class="switch-text">启用用户注册时间筛选</span>
+                                    </label>
+                                </div>
+                                <div id="regDays-container" class="condition-container" style="display: none;">
+                                    <div class="input-group">
+                                        <input type="number" placeholder="最少注册天数" id="minRegDays">
+                                        <input type="number" placeholder="最多注册天数" id="maxRegDays">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="sub-form-group">
+                                <div class="switch-header">
+                                    <label class="switch-label">
+                                        <input type="checkbox" class="condition-switch" data-target="customCondition-container">
+                                        <span class="switch-text">启用其他自定义条件</span>
+                                    </label>
+                                </div>
+                                <div id="customCondition-container" class="condition-container" style="display: none;">
+                                    <textarea id="customCondition" placeholder="可输入其他自定义条件，例如：购买次数>3 且 最近登录<7天"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>分桶策略</h2>
+                        <div class="form-group">
+                            <label for="bucketing">分桶方式</label>
+                            <p>根据用户标识已选择的依据，选择如何将用户分配到不同实验组</p>
+                            <select id="bucketing" onchange="toggleTrafficPercentage()">
+                                <option value="random">随机分桶</option>
+                                <option value="ratio" selected>比例分桶</option>
+                            </select>
+                            <div id="bucketingInfo" class="info-box" style="margin-top: 10px;">
+                                <div class="info-content">
+                                    <p><strong>比例分桶:</strong> 根据设定的流量比例，将用户按照特定比例分配到不同的实验组。</p>
+                                    <p><strong>随机分桶:</strong> 完全随机地将用户分配到不同实验组，每个实验组将获得大致相等的流量。</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="experimentGroups">
+                            <div class="form-group">
+                                <h3>实验组配置</h3>
+                                <button type="button" class="btn btn-sm btn-outline" onclick="addExperimentGroup()">
+                                    <i class="icon">+</i> 添加实验组
+                                </button>
+                            </div>
+                            
+                            <div class="experiment-group">
+                                <h4>
+                                    <span>默认对照组（A组）</span>
+                                </h4>
+                                <div class="form-group">
+                                    <label>组名</label>
+                                    <input type="text" name="groupName[]" value="对照组" required>
+                                </div>
+                                <div class="form-group traffic-percentage">
+                                    <label>流量占比 (%)</label>
+                                    <input type="number" name="trafficPercentage[]" value="50" min="1" max="100" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>返回值 (value)</label>
+                                    <textarea name="returnValue[]" required>{"version": "A", "feature_enabled": false}</textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="experiment-group">
+                                <h4>
+                                    <span>实验组（B组）</span>
+                                </h4>
+                                <div class="form-group">
+                                    <label>组名</label>
+                                    <input type="text" name="groupName[]" value="实验组" required>
+                                </div>
+                                <div class="form-group traffic-percentage">
+                                    <label>流量占比 (%)</label>
+                                    <input type="number" name="trafficPercentage[]" value="50" min="1" max="100" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>返回值 (value)</label>
+                                    <textarea name="returnValue[]" required>{"version": "B", "feature_enabled": true}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>实验时间</h2>
+                        <div class="form-group date-time-picker" onclick="clickDateTimePicker('startDate')">
+                            <label for="startDate">开始时间</label>
+                            <div class="date-time-input-wrapper">
+                                <input type="datetime-local" id="startDate" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group date-time-picker" onclick="clickDateTimePicker('endDate')">
+                            <label for="endDate">结束时间</label>
+                            <div class="date-time-input-wrapper">
+                                <input type="datetime-local" id="endDate" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button type="button" class="btn btn-outline" onclick="saveExperiment()">保存草稿</button>
+                        <button type="button" class="btn btn-success" onclick="saveAndStartExperiment()">保存并启动</button>
+                        <button type="reset" class="btn btn-danger">重置</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 模拟数据
+        let experiments = [
+            {
+                id: 1,
+                name: "首页布局测试",
+                key: "home_layout_test",
+                status: "运行中",
+                createdAt: "2023-06-15 09:30:00"
+            },
+            {
+                id: 2,
+                name: "新用户引导流程",
+                key: "new_user_onboarding",
+                status: "已完成",
+                createdAt: "2023-05-20 14:15:00"
+            },
+            {
+                id: 3,
+                name: "支付流程优化",
+                key: "payment_process",
+                status: "计划中",
+                createdAt: "2023-06-25 11:00:00"
+            }
+        ];
+
+        // 初始化页面
+        window.onload = function() {
+            loadExperiments();
+            
+            // 监听目标用户选择变化
+            document.getElementById('targetUsers')?.addEventListener('change', function() {
+                const customUserGroup = document.getElementById('customUserGroup');
+                if (this.value === 'custom') {
+                    customUserGroup.style.display = 'block';
+                } else {
+                    customUserGroup.style.display = 'none';
+                }
+            });
+        };
+
+        // 加载实验列表
+        function loadExperiments() {
+            const tbody = document.getElementById('experimentsList');
+            tbody.innerHTML = '';
+            
+            experiments.forEach(exp => {
+                const tr = document.createElement('tr');
+                
+                // 设置状态样式
+                let statusClass = '';
+                if (exp.status === '运行中') {
+                    statusClass = 'badge-success';
+                } else if (exp.status === '计划中') {
+                    statusClass = 'badge-info';
+                } else {
+                    statusClass = 'badge-warning';
+                }
+                
+                tr.innerHTML = `
+                    <td>${exp.name}</td>
+                    <td><code>${exp.key}</code></td>
+                    <td><span class="badge ${statusClass}">${exp.status}</span></td>
+                    <td>${exp.createdAt}</td>
+                    <td>
+                        <button class="btn btn-sm" onclick="editExperiment(${exp.id})">编辑</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteExperiment(${exp.id})">删除</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // 显示创建实验页面
+        function showCreatePage() {
+            document.getElementById('listPage').style.display = 'none';
+            document.getElementById('createPage').style.display = 'block';
+            // 设置页面标题
+            document.title = '创建新实验 - AB测试配置后台';
+            // 可以在这里添加页面状态保存到历史记录
+            window.history.pushState({page: 'create'}, '', '#create');
+        }
+        
+        // 显示实验列表页面
+        function showListPage() {
+            document.getElementById('createPage').style.display = 'none';
+            document.getElementById('listPage').style.display = 'block';
+            // 设置页面标题
+            document.title = 'AB测试配置后台';
+            // 可以在这里添加页面状态保存到历史记录
+            window.history.pushState({page: 'list'}, '', '#list');
+        }
+        
+        // 处理浏览器的前进后退按钮
+        window.onpopstate = function(event) {
+            if (event.state && event.state.page === 'create') {
+                showCreatePage();
+            } else {
+                showListPage();
+            }
+        };
+
+        // 添加实验组
+        function addExperimentGroup() {
+            const groupsContainer = document.getElementById('experimentGroups');
+            const groupCount = document.getElementsByClassName('experiment-group').length;
+            const bucketingType = document.getElementById('bucketing').value;
+            const showTrafficPercentage = bucketingType === 'ratio';
+            
+            const newGroup = document.createElement('div');
+            newGroup.className = 'experiment-group';
+            newGroup.innerHTML = `
+                <h4>
+                    <span>实验组 ${groupCount}</span>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="removeExperimentGroup(this)">删除</button>
+                </h4>
+                <div class="form-group">
+                    <label>组名</label>
+                    <input type="text" name="groupName[]" required>
+                </div>
+                <div class="form-group traffic-percentage" ${!showTrafficPercentage ? 'style="display: none;"' : ''}>
+                    <label>流量占比 (%)</label>
+                    <input type="number" name="trafficPercentage[]" min="1" max="100" required>
+                </div>
+                <div class="form-group">
+                    <label>返回值 (value)</label>
+                    <textarea name="returnValue[]" required></textarea>
+                </div>
+            `;
+            
+            groupsContainer.appendChild(newGroup);
+        }
+
+        // 删除实验组
+        function removeExperimentGroup(btn) {
+            const group = btn.closest('.experiment-group');
+            group.remove();
+        }
+
+        // 保存实验
+        function saveExperiment() {
+            // 这里应该是保存实验数据的逻辑
+            // 通常会发送AJAX请求到后端
+            alert('实验已保存');
+        }
+
+        // 保存并启动实验
+        function saveAndStartExperiment() {
+            // 这里应该是保存并启动实验的逻辑
+            alert('实验已保存并启动');
+        }
+
+        // 编辑实验
+        function editExperiment(id) {
+            // 编辑实验的逻辑
+            const experiment = experiments.find(exp => exp.id === id);
+            if (experiment) {
+                // 切换到创建页面并填充数据
+                showCreatePage();
+                document.getElementById('experimentName').value = experiment.name;
+                document.getElementById('experimentKey').value = experiment.key;
+                // ... 填充其他字段
+            }
+        }
+
+        // 删除实验
+        function deleteExperiment(id) {
+            if (confirm('确定要删除此实验吗？')) {
+                // 删除实验的逻辑
+                experiments = experiments.filter(exp => exp.id !== id);
+                loadExperiments();
+            }
+        }
+
+        // 监听条件开关
+        document.addEventListener('DOMContentLoaded', function() {
+            const conditionSwitches = document.querySelectorAll('.condition-switch');
+            conditionSwitches.forEach(switchEl => {
+                switchEl.addEventListener('change', function() {
+                    const targetContainer = document.getElementById(this.dataset.target);
+                    if (targetContainer) {
+                        targetContainer.style.display = this.checked ? 'block' : 'none';
+                    }
+                });
+            });
+        });
+
+        // 根据分桶方式显示/隐藏流量占比
+        function toggleTrafficPercentage() {
+            const bucketingType = document.getElementById('bucketing').value;
+            const showTrafficPercentage = bucketingType === 'ratio';
+            const trafficPercentageElements = document.querySelectorAll('.traffic-percentage');
+            
+            trafficPercentageElements.forEach(element => {
+                element.style.display = showTrafficPercentage ? 'block' : 'none';
+            });
+            
+            // 如果是随机分桶，显示提示信息
+            if (!showTrafficPercentage) {
+                const firstGroup = document.querySelector('.experiment-group');
+                if (firstGroup && !document.getElementById('random-bucketing-hint')) {
+                    const hintElement = document.createElement('div');
+                    hintElement.id = 'random-bucketing-hint';
+                    hintElement.className = 'info-box';
+                    hintElement.innerHTML = `
+                        <div class="info-content">
+                            <p>使用随机分桶时，所有实验组将获得<strong>大致相等</strong>的流量分配。</p>
+                        </div>
+                    `;
+                    document.getElementById('experimentGroups').insertBefore(hintElement, firstGroup);
+                }
+            } else {
+                const hintElement = document.getElementById('random-bucketing-hint');
+                if (hintElement) {
+                    hintElement.remove();
+                }
+            }
+        }
+
+        // 页面加载时初始化分桶相关UI
+        document.addEventListener('DOMContentLoaded', function() {
+            // 其他现有代码...
+            
+            // 初始化分桶UI
+            toggleTrafficPercentage();
+        });
+
+        // 点击触发时间选择器
+        function clickDateTimePicker(inputId) {
+            const input = document.getElementById(inputId);
+            input.focus();
+            // 为了兼容性，模拟点击事件
+            input.click();
+        }
+    </script>
+</body>
+</html>
